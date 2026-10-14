@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LedgerVault — Minimalist Local Intelligence & Tax Ledger</title>
+  <meta name="description" content="Professional, zero-cloud freelance invoice and receipt sorter powered by local open-source AI and on-device OCR.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/style.css">
+</head>
+<body>
+  <!-- Main Application Shell -->
+  <div class="app-shell">
+
+    <!-- Reconstructed Left Sidebar -->
+    <aside class="app-sidebar" id="appSidebar">
+      <!-- Brand & Security Header -->
+      <div class="sidebar-header">
+        <div class="brand" id="brandLogo" title="LedgerVault Home">
+          <div class="brand-monogram">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="brand-meta">
+            <span class="brand-title">LedgerVault</span>
+            <span class="brand-badge">Local AI</span>
+          </div>
+        </div>
+
+        <div class="privacy-status" title="Zero cloud egress. All OCR and AI inference run strictly on this device.">
+          <span class="privacy-dot"></span>
+          <span class="privacy-text">Local RAM Only</span>
+        </div>
+      </div>
+
+      <!-- Navigation Section -->
+      <div class="sidebar-nav-wrap">
+        <span class="sidebar-section-label">Workspace</span>
+        <nav class="sidebar-nav segmented-control" id="mainNavTabs">
+          <button class="nav-item seg-btn active" data-tab="scan" id="tabScanBtn">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/>
+                <line x1="7" y1="12" x2="17" y2="12"/>
+                <line x1="12" y1="7" x2="12" y2="17"/>
+              </svg>
+            </span>
+            <span class="nav-label">Intake & Scan</span>
+          </button>
+
+          <button class="nav-item seg-btn" data-tab="inspector" id="tabInspectorBtn">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="12" y1="3" x2="12" y2="21"/>
+              </svg>
+            </span>
+            <span class="nav-label">Inspector</span>
+            <span class="seg-count" id="uninspectedCount">0</span>
+          </button>
+
+          <button class="nav-item seg-btn" data-tab="ledger" id="tabLedgerBtn">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </span>
+            <span class="nav-label">Expense Ledger</span>
+            <span class="seg-count" id="totalLedgerCount">0</span>
+          </button>
+
+          <button class="nav-item seg-btn" data-tab="analytics" id="tabAnalyticsBtn">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </span>
+            <span class="nav-label">Tax & Insights</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Engine & System Settings Section -->
+      <div class="sidebar-engine-box">
+        <span class="sidebar-section-label">Inference Engine</span>
+        <div class="engine-selector-card">
+          <div class="engine-select-header">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+              <rect x="9" y="9" width="6" height="6"/>
+              <line x1="9" y1="1" x2="9" y2="4"/>
+              <line x1="15" y1="1" x2="15" y2="4"/>
+              <line x1="9" y1="20" x2="9" y2="23"/>
+              <line x1="15" y1="20" x2="15" y2="23"/>
+              <line x1="20" y1="9" x2="23" y2="9"/>
+              <line x1="20" y1="14" x2="23" y2="14"/>
+              <line x1="1" y1="9" x2="4" y2="9"/>
+              <line x1="1" y1="14" x2="4" y2="14"/>
+            </svg>
+            <span class="engine-status-text">Local Model</span>
+          </div>
+          <select id="engineSelector" class="minimal-select w-full" title="Select Local AI Inference Engine">
+            <option value="tesseract-wasm" selected>Tesseract WASM (In-Browser)</option>
+            <option value="ollama-local">Local Ollama (Llama 3.2)</option>
+            <option value="instant-demo">Fast Deterministic Engine</option>
+          </select>
+          <div class="engine-subtext">No API keys required • Free forever</div>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-actions-grid">
+          <button class="sidebar-action-btn" id="btnWhyOpen" title="Why Open Source AI?">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>Why Open AI</span>
+          </button>
+
+          <button class="sidebar-action-btn btn-license" id="btnPricing" title="Commercial Lifetime License">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            <span>License ($29)</span>
+          </button>
+        </div>
+
+        <div class="sidebar-user-strip">
+          <div class="theme-switch-container">
+            <button class="icon-toggle" id="btnThemeToggle" title="Toggle Light/Dark Theme">
+              <span class="theme-icon-light hidden">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1" x2="12" y2="3"/>
+                  <line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1" y1="12" x2="3" y2="12"/>
+                  <line x1="21" y1="12" x2="23" y2="12"/>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+              </span>
+              <span class="theme-icon-dark">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </span>
+            </button>
+            <span class="theme-switch-label">Switch Theme</span>
+          </div>
+          <div class="storage-indicator" title="Local IndexedDB Active">
+            <span class="storage-dot"></span>
+            <span>Local DB</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Workspace -->
+    <div class="app-main">
+      <!-- Executive Top Bar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="btnMobileMenuToggle" aria-label="Toggle navigation">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <div class="topbar-breadcrumbs">
+            <span class="crumb-root">Workspace</span>
+            <span class="crumb-separator">/</span>
+            <span class="crumb-current" id="activeViewBreadcrumb">Intake & Local OCR</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="topbar-stat-pill">
+            <span class="topbar-stat-dot"></span>
+            <span class="topbar-stat-label">Privacy Shield: Active</span>
+          </div>
+
+          <div class="topbar-actions">
+            <button class="btn-subtle btn-sm" id="btnTopUpload" onclick="document.getElementById('fileInput').click()">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span>Scan File</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable App Canvas -->
+      <div class="app-content-scroll">
+        <div class="app-layout">
+
+          <!-- Reconstructed Executive KPI Metric Strip -->
+          <section class="kpi-strip">
+            <div class="kpi-card">
+              <div class="kpi-card-head">
+                <span class="kpi-label">Total Expenses</span>
+                <span class="kpi-badge neutral">100% Local</span>
+              </div>
+              <div class="kpi-num" id="kpiTotalExpense">$0.00</div>
+              <div class="kpi-sub" id="kpiReceiptsCount">0 receipts verified</div>
+            </div>
+
+            <div class="kpi-card highlight-card">
+              <div class="kpi-card-head">
+                <span class="kpi-label">Tax Write-Offs</span>
+                <span class="kpi-badge success">IRS Schedule C</span>
+              </div>
+              <div class="kpi-num text-highlight" id="kpiTaxDeduction">$0.00</div>
+              <div class="kpi-sub" id="kpiTaxSavingsEst">Saves ~$0 in taxes (30% bracket)</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-head">
+                <span class="kpi-label">Client Billable</span>
+                <span class="kpi-badge primary">Reimbursable</span>
+              </div>
+              <div class="kpi-num" id="kpiBillableTotal">$0.00</div>
+              <div class="kpi-sub" id="kpiBillablePct">0% of total spend</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-head">
+                <span class="kpi-label">Average Transaction</span>
+                <span class="kpi-badge neutral">Median</span>
+              </div>
+              <div class="kpi-num" id="kpiAvgExpense">$0.00</div>
+              <div class="kpi-sub">Mean spend per entry</div>
+            </div>
+          </section>
+
+          <!-- ==========================================================================
+               VIEW 1: INTAKE & SCANNER
+               ========================================================================== -->
+          <section class="view-panel active" id="viewScan">
+            <!-- Modern Minimalist Dropzone -->
+            <div class="minimal-dropzone" id="receiptDropzone">
+              <input type="file" id="fileInput" accept="image/*,.pdf" multiple class="file-input-hidden">
+              <div class="dropzone-body">
+                <div class="dropzone-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="1.6" fill="none">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                </div>
+                <div class="dropzone-text">
+                  <h4>Drag & Drop Invoices or Receipts</h4>
+                  <p>Supports PNG, JPG, WebP, PDF • 100% On-Device OCR • No data ever leaves your computer</p>
+                </div>
+                <div class="dropzone-buttons">
+                  <button type="button" class="btn-solid" id="browseFilesBtn">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span>Browse Files</span>
+                  </button>
+                  <button type="button" class="btn-subtle" id="cameraSnapBtn">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                      <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    <span>Camera Scan</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Processing Progress Card -->
+            <div class="minimal-progress hidden" id="processingStatusCard">
+              <div class="progress-meta">
+                <div class="progress-title-wrap">
+                  <span class="progress-pulse-dot"></span>
+                  <span id="processingStatusTitle">Processing on-device OCR...</span>
+                </div>
+                <span class="progress-val" id="processingProgressPct">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar" id="processingProgressBar" style="width: 0%"></div>
+              </div>
+              <div class="progress-foot">
+                <span class="progress-sub" id="processingStatusSub">Initializing WebAssembly engine</span>
+                <span class="progress-engine-tag">Tesseract WASM + Local NLP</span>
+              </div>
+            </div>
+
+            <!-- Instant Test Suite Strip -->
+            <div class="test-suite-strip">
+              <div class="strip-header">
+                <div>
+                  <h3 class="strip-title">Instant Test Suite</h3>
+                  <p class="strip-hint">Click any synthetic business receipt to execute local on-device OCR & tax parsing in 1 click</p>
+                </div>
+                <div class="strip-tag">Zero Setup</div>
+              </div>
+              <div class="sample-chips-row" id="sampleReceiptsList">
+                <!-- Populated dynamically by JS -->
+              </div>
+            </div>
+          </section>
+
+          <!-- ==========================================================================
+               VIEW 2: SPLIT-SCREEN INSPECTOR
+               ========================================================================== -->
+          <section class="view-panel" id="viewInspector">
+            <div class="split-workspace">
+              <!-- Left: High-Res Interactive Viewer -->
+              <div class="viewer-pane">
+                <div class="pane-toolbar">
+                  <div class="pane-file-meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <span class="pane-filename" id="inspectorFileName">receipt.png</span>
+                  </div>
+                  <div class="pane-controls">
+                    <button class="ctrl-btn" id="btnZoomIn" title="Zoom in">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                    <button class="ctrl-btn" id="btnZoomOut" title="Zoom out">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                    <button class="ctrl-btn" id="btnZoomFit" title="Fit view">Fit</button>
+                    <button class="ctrl-btn ctrl-btn-active" id="btnToggleOcrBoxes" title="Toggle OCR Word Bounding Boxes">OCR Boxes</button>
+                  </div>
+                </div>
+
+                <div class="viewer-viewport" id="receiptViewport">
+                  <div class="viewer-wrapper" id="canvasWrapper">
+                    <img id="receiptImagePreview" src="" alt="Receipt Preview" class="viewer-image">
+                    <div class="ocr-bounding-layer" id="ocrBoundingLayer"></div>
+                  </div>
+                </div>
+
+                <!-- Collapsible Raw OCR Text Stream -->
+                <details class="minimal-raw-ocr">
+                  <summary>
+                    <span>Raw OCR Text Stream</span>
+                    <span class="summary-sub">Deterministic line tokens</span>
+                  </summary>
+                  <pre id="rawOcrTextPre">// Extracted raw tokens will render here...</pre>
+                </details>
+              </div>
+
+              <!-- Right: Structured AI Extraction Card -->
+              <div class="form-pane">
+                <div class="form-pane-header">
+                  <div>
+                    <h3 class="pane-title">AI Extracted Metadata</h3>
+                    <p class="sub-muted">Verify and adjust structured fields parsed by the on-device engine</p>
+                  </div>
+                  <div class="minimal-confidence" id="aiConfidenceBadge">
+                    <span class="confidence-dot"></span>
+                    <span id="aiConfidenceText">98% Confidence</span>
+                  </div>
+                </div>
+
+                <form id="receiptEditForm" class="minimal-form" onsubmit="return false;">
+                  <div class="field-row">
+                    <div class="field-col flex-2">
+                      <label for="fieldMerchant">Merchant / Vendor</label>
+                      <input type="text" id="fieldMerchant" class="min-input" required placeholder="e.g. Vultr, Apple, Bistro">
+                    </div>
+                    <div class="field-col flex-1">
+                      <label for="fieldDate">Transaction Date</label>
+                      <input type="date" id="fieldDate" class="min-input" required>
+                    </div>
+                  </div>
+
+                  <div class="field-row">
+                    <div class="field-col flex-1">
+                      <label for="fieldTotal">Total ($)</label>
+                      <input type="number" step="0.01" id="fieldTotal" class="min-input num-font" required placeholder="0.00">
+                    </div>
+                    <div class="field-col flex-1">
+                      <label for="fieldTax">Tax ($)</label>
+                      <input type="number" step="0.01" id="fieldTax" class="min-input num-font" placeholder="0.00">
+                    </div>
+                    <div class="field-col flex-1">
+                      <label for="fieldPayment">Payment Method</label>
+                      <input type="text" id="fieldPayment" class="min-input" placeholder="e.g. Visa 8821">
+                    </div>
+                  </div>
+
+                  <div class="field-row">
+                    <div class="field-col flex-2">
+                      <label for="fieldCategory">Schedule C Tax Category</label>
+                      <select id="fieldCategory" class="min-select">
+                        <option value="software">Software & Subscriptions (100% Deductible)</option>
+                        <option value="hardware">Hardware & Equipment (Sec 179 - 100%)</option>
+                        <option value="meals">Client Meals & Dining (50% Deductible)</option>
+                        <option value="office">Office & Co-Working (100% Deductible)</option>
+                        <option value="travel">Travel & Transit (100% Deductible)</option>
+                        <option value="subcontractor">Subcontractor Labor (100% Deductible)</option>
+                        <option value="advertising">Marketing & Ads (100% Deductible)</option>
+                        <option value="other">Miscellaneous Business Expense</option>
+                      </select>
+                    </div>
+                    <div class="field-col flex-1">
+                      <label>Tax Savings Est.</label>
+                      <div class="deductible-summary" id="deductibleRateBox">
+                        <span class="deductible-pct" id="deductibleRateText">100%</span>
+                        <span class="deductible-calc" id="deductibleEstText">Saves ~$0</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field-row">
+                    <div class="field-col flex-2">
+                      <label for="fieldClientProject">Client / Project Allocation</label>
+                      <input type="text" id="fieldClientProject" class="min-input" placeholder="e.g. Acme Corp Contract">
+                    </div>
+                    <div class="field-col flex-1 align-center">
+                      <label class="toggle-wrap">
+                        <input type="checkbox" id="fieldBillable">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-text">Billable to Client</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Line Items Table -->
+                  <div class="items-block">
+                    <div class="items-header">
+                      <span class="items-title">Itemized Line Items</span>
+                      <button type="button" class="btn-link" id="btnAddLineItem">+ Add Row</button>
+                    </div>
+                    <table class="items-table" id="lineItemsTable">
+                      <thead>
+                        <tr>
+                          <th>Item Description</th>
+                          <th class="w-16">Qty</th>
+                          <th class="w-24">Price</th>
+                          <th class="w-8"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="lineItemsBody">
+                        <!-- Populated by JS -->
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="field-col">
+                    <label for="fieldNotes">Audit & Business Purpose Notes</label>
+                    <input type="text" id="fieldNotes" class="min-input" placeholder="e.g. Q4 cloud cluster deployment for freelance client delivery">
+                  </div>
+
+                  <!-- Form Action Buttons -->
+                  <div class="form-actions">
+                    <button type="button" class="btn-subtle text-danger" id="btnDiscardReceipt">Discard</button>
+                    <div class="action-nav-group">
+                      <button type="button" class="btn-subtle" id="btnPrevReceipt" title="Previous in queue">← Prev</button>
+                      <button type="button" class="btn-solid btn-confirm" id="btnSaveToLedger">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Confirm & Save</span>
+                      </button>
+                      <button type="button" class="btn-subtle" id="btnNextReceipt" title="Next in queue">Next →</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==========================================================================
+               VIEW 3: EXPENSE LEDGER
+               ========================================================================== -->
+          <section class="view-panel" id="viewLedger">
+            <!-- Filter & Search Toolbar -->
+            <div class="ledger-topbar">
+              <div class="search-strip">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="ledgerSearchInput" class="min-input search-input" placeholder="Search merchant, notes, client project, or category...">
+              </div>
+
+              <div class="filters-strip">
+                <select id="filterCategory" class="min-select filter-select">
+                  <option value="all">All Categories</option>
+                  <option value="software">Software</option>
+                  <option value="hardware">Hardware</option>
+                  <option value="meals">Meals (50%)</option>
+                  <option value="office">Office</option>
+                  <option value="travel">Travel</option>
+                  <option value="subcontractor">Subcontractor</option>
+                  <option value="advertising">Marketing</option>
+                </select>
+
+                <select id="filterBillable" class="min-select filter-select">
+                  <option value="all">All Billing Types</option>
+                  <option value="billable">Billable Only</option>
+                  <option value="non-billable">Overhead Only</option>
+                </select>
+
+                <button class="btn-subtle" id="btnClearFilters">Reset</button>
+              </div>
+
+              <div class="export-strip">
+                <button class="btn-subtle" id="btnExportCsv" title="Export as CSV spreadsheet">CSV</button>
+                <button class="btn-subtle" id="btnExportJson" title="Export as JSON archive">JSON</button>
+                <button class="btn-solid" id="btnPrintReport">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"/>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                    <rect x="6" y="14" width="12" height="8"/>
+                  </svg>
+                  <span>Print Tax Package</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Modern Financial Data Table -->
+            <div class="ledger-container">
+              <table class="minimal-table" id="ledgerTable">
+                <thead>
+                  <tr>
+                    <th class="w-8 text-center"><input type="checkbox" id="selectAllCheckbox" title="Select all rows"></th>
+                    <th class="sortable" data-sort="date">Date <span class="sort-indicator">↕</span></th>
+                    <th class="sortable" data-sort="merchant">Merchant & Purpose <span class="sort-indicator">↕</span></th>
+                    <th>Category</th>
+                    <th>Project</th>
+                    <th class="sortable text-right" data-sort="total">Amount <span class="sort-indicator">↕</span></th>
+                    <th class="text-right">Deductible</th>
+                    <th class="text-center">Billing</th>
+                    <th class="text-center w-16">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ledgerTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+
+              <!-- Empty State -->
+              <div class="minimal-empty hidden" id="ledgerEmptyState">
+                <div class="empty-icon-box">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <h4>No receipts in ledger yet</h4>
+                <p>Import your invoices or test a sample receipt to view structured tax rows.</p>
+                <button class="btn-solid" id="btnGoToScanEmpty">Scan First Receipt</button>
+              </div>
+            </div>
+
+            <!-- Floating Sticky Bulk Actions Bar -->
+            <div class="minimal-bulk-bar hidden" id="bulkActionsBar">
+              <div class="bulk-pill">
+                <span class="bulk-dot"></span>
+                <span id="bulkSelectedText">0 selected</span>
+              </div>
+              <div class="bulk-actions">
+                <button class="btn-subtle btn-xs" id="btnBulkBillable">Toggle Billable</button>
+                <button class="btn-subtle btn-xs" id="btnBulkCategory">Change Category</button>
+                <button class="btn-subtle btn-xs text-danger" id="btnBulkDelete">Delete Selected</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==========================================================================
+               VIEW 4: TAX & ANALYTICS
+               ========================================================================== -->
+          <section class="view-panel" id="viewAnalytics">
+            <div class="analytics-layout">
+              <!-- Chart 1: Donut breakdown -->
+              <div class="minimal-card">
+                <div class="card-head">
+                  <div class="card-title-group">
+                    <h4>Schedule C Expense Breakdown</h4>
+                    <span class="sub-muted">Allocation by IRS expense classification</span>
+                  </div>
+                  <span class="kpi-badge neutral">Retina Render</span>
+                </div>
+                <div class="chart-canvas-box">
+                  <canvas id="categoryDonutChart" width="320" height="240"></canvas>
+                  <div id="donutLegend" class="minimal-legend"></div>
+                </div>
+              </div>
+
+              <!-- Chart 2: Monthly Velocity Bar Chart -->
+              <div class="minimal-card">
+                <div class="card-head">
+                  <div class="card-title-group">
+                    <h4>Monthly Expense & Write-Off Velocity</h4>
+                    <span class="sub-muted">Gross spend vs actual IRS tax deductible portion</span>
+                  </div>
+                  <div class="chart-legend-pills">
+                    <span class="chart-pill pill-gross">Gross Spend</span>
+                    <span class="chart-pill pill-deductible">Deductible</span>
+                  </div>
+                </div>
+                <div class="chart-canvas-box">
+                  <canvas id="monthlyBarChart" width="460" height="240"></canvas>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1: WHY OPEN SOURCE AI
+       ========================================================================== -->
+  <div class="minimal-modal-backdrop hidden" id="modalWhyOpen">
+    <div class="minimal-modal">
+      <div class="modal-head">
+        <div class="modal-title-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <h3>Why Open-Source AI Matters</h3>
+        </div>
+        <button class="close-x" id="btnCloseWhyOpen" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-content">
+        <div class="minimal-grid-2">
+          <div class="info-block">
+            <h5>1. Zero Cloud Egress (100% Privacy)</h5>
+            <p>Cloud SaaS (QuickBooks, Expensify, OpenAI) transfers your bank slips and vendor info to remote servers. LedgerVault runs on-device via Tesseract WASM and Ollama: zero data ever leaves your device.</p>
+          </div>
+          <div class="info-block">
+            <h5>2. $0.00 Inference Overhead</h5>
+            <p>Traditional SaaS burns cloud API credits on every single scan. LedgerVault leverages client CPU/WASM: zero inference costs allow a sustainable $29 lifetime model with ~96% gross margins.</p>
+          </div>
+          <div class="info-block">
+            <h5>3. 100% Offline Resilience</h5>
+            <p>Works anywhere without internet connectivity—on flights, trains, or job sites. All receipts and vector data remain encrypted in your local browser IndexedDB.</p>
+          </div>
+          <div class="info-block">
+            <h5>4. Model Independence</h5>
+            <p>Zero vendor lock-in. Switch seamlessly between in-browser WASM, local Ollama (Llama 3.2, Qwen 2.5), or lightweight deterministic parsers.</p>
+          </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <table class="simple-table">
+          <thead>
+            <tr>
+              <th>Evaluation Metric</th>
+              <th>LedgerVault (Open Core)</th>
+              <th>Cloud SaaS (QuickBooks / Expensify)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Data Security</td>
+              <td class="text-highlight">100% On-Device RAM & IndexedDB</td>
+              <td>Transmitted across remote corporate servers</td>
+            </tr>
+            <tr>
+              <td>Inference Cost</td>
+              <td class="text-highlight">$0.00 / scan (Free Forever)</td>
+              <td>Paid token usage ($5k–$20k/yr burn)</td>
+            </tr>
+            <tr>
+              <td>Pricing Model</td>
+              <td class="text-highlight">$29 Lifetime Ownership</td>
+              <td>$180 – $360 recurring subscription / year</td>
+            </tr>
+            <tr>
+              <td>Offline Capability</td>
+              <td class="text-highlight">Full offline capability</td>
+              <td>Completely unusable without network</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-solid" id="btnGotItWhyOpen">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: SIDE HUSTLE ECONOMICS
+       ========================================================================== -->
+  <div class="minimal-modal-backdrop hidden" id="modalPricing">
+    <div class="minimal-modal">
+      <div class="modal-head">
+        <div class="modal-title-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <h3>Side Hustle Economics</h3>
+        </div>
+        <button class="close-x" id="btnClosePricing" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-content">
+        <div class="pricing-highlight">
+          <span class="price-val">$29</span>
+          <span class="price-unit">one-time lifetime license</span>
+          <p class="price-desc">Freelancers are exhausted by recurring monthly SaaS fees. A pay-once local tool has instant appeal with zero ongoing server costs.</p>
+        </div>
+
+        <div class="metrics-list">
+          <div class="metric-line">
+            <span>Hosting & Compute Cost</span>
+            <strong>$0.00 / month</strong>
+          </div>
+          <div class="metric-line">
+            <span>Gross Profit Margin</span>
+            <strong>~96% (after payment processing)</strong>
+          </div>
+          <div class="metric-line">
+            <span>Break-even Customer Count</span>
+            <strong>1 customer</strong>
+          </div>
+        </div>
+
+        <div class="quote-card">
+          <p><em>"I had 120 client receipts and refused to pay $30/month for QuickBooks just to track a few expenses. I paid $29 for LedgerVault and categorized everything locally in 10 minutes without uploading anything."</em></p>
+          <span class="author">— Marco T., Independent Motion Designer</span>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-subtle" id="btnSimulatePurchase">Simulate First Sale ($29)</button>
+        <button class="btn-solid" id="btnClosePricingBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: CAMERA CAPTURE
+       ========================================================================== -->
+  <div class="minimal-modal-backdrop hidden" id="modalCamera">
+    <div class="minimal-modal">
+      <div class="modal-head">
+        <div class="modal-title-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <h3>Capture Physical Receipt</h3>
+        </div>
+        <button class="close-x" id="btnCloseCamera" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-content text-center">
+        <video id="cameraVideo" autoplay playsinline class="camera-feed"></video>
+        <canvas id="cameraCanvas" class="hidden"></canvas>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-subtle" id="btnCancelCamera">Cancel</button>
+        <button class="btn-solid" id="btnCapturePhoto">Capture & Local OCR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: OLLAMA SETTINGS
+       ========================================================================== -->
+  <div class="minimal-modal-backdrop hidden" id="modalOllamaSettings">
+    <div class="minimal-modal">
+      <div class="modal-head">
+        <div class="modal-title-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+            <rect x="9" y="9" width="6" height="6"/>
+          </svg>
+          <h3>Local Ollama Bridge Configuration</h3>
+        </div>
+        <button class="close-x" id="btnCloseOllamaSettings" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-content">
+        <div class="field-col">
+          <label for="ollamaEndpoint">Endpoint URL</label>
+          <input type="text" id="ollamaEndpoint" class="min-input" value="http://localhost:11434">
+          <span class="sub-muted">Start Ollama with: <code>OLLAMA_ORIGINS="*" ollama serve</code></span>
+        </div>
+        <div class="field-col">
+          <label for="ollamaModel">Local Model Name</label>
+          <input type="text" id="ollamaModel" class="min-input" value="llama3.2">
+          <span class="sub-muted">Tested models: <code>llama3.2</code>, <code>qwen2.5</code>, <code>smollm2</code></span>
+        </div>
+        <div class="status-msg" id="ollamaPingResult">Click "Test Connection" to check local server.</div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-subtle" id="btnTestOllamaPing">Test Connection</button>
+        <button class="btn-solid" id="btnSaveOllamaSettings">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>
